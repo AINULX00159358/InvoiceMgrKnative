@@ -52,7 +52,7 @@ jobs:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
 
-    - name: buildAuditReporter
+    - name: buildAndPushImage
       run: |
        cd /home/runner/work/InvoiceMgrKnative/InvoiceMgrKnative
        /home/runner/knfunc build --registry docker.io/x00159358 --push --verbose
