@@ -1,0 +1,114 @@
+# This is a basic workflow that is manually triggered
+# This is a basic workflow that is manually triggered
+
+name: build and push image workflow
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      DockerUsername:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'user name of docker container registry'
+        # Default value if no value is explicitly provided
+        default: 'x00159358'
+        # Input has to be provided for the workflow to run
+        required: false
+        # The data type of the input
+        type: string
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "greet"
+  downloadKnativeFuncCLI:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - uses: actions/checkout@v3
+       
+    # Steps represent a sequenc
+    # Runs a single command using the runners shell
+    - name: dowload Knative Function CLI
+      run: | 
+       curl -LO https://github.com/knative/func/releases/download/knative-v1.10.0/func_linux_amd64
+       chmod a+x func_linux_amd64
+       mv func_linux_amd64 knfunc
+       ls -lrt
+       cp knfunc ${HOME}/knfunc
+       ls -lrt ${HOME}
+    
+    - name: checkKnFunc
+      run: /home/runner/knfunc version
+
+    - name: docker login
+      run: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin 
+      env:
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+
+    - name: buildAuditReporter
+      run: |
+       cd /home/runner/work/KnativeInvoiceManager/KnativeInvoiceManager
+       cp -R common auditreporter/.
+       /home/runner/knfunc build --registry docker.io/x00159358 --push --verbose --path auditreporter
+
+    - name: builddopayment
+      run: |
+       cd /home/runner/work/KnativeInvoiceManager/KnativeInvoiceManager
+       cp -R common dopayment/.
+       /home/runner/knfunc build --registry docker.io/x00159358 --push --verbose --path dopayment
+
+    - name: buildInvoicePayment
+      run: |
+       cd /home/runner/work/KnativeInvoiceManager/KnativeInvoiceManager
+       cp -R common invoicepayment/.
+       /home/runner/knfunc build --registry docker.io/x00159358 --push --verbose --path invoicepayment
+
+    - name: buildInvoiceGenerator
+      run: |
+       cd /home/runner/work/KnativeInvoiceManager/KnativeInvoiceManager
+       cp -R common invoicegenerator/.
+       /home/runner/knfunc build --registry docker.io/x00159358 --push --verbose --path invoicegenerator
+       
+    - name: buildRegisterInvoice
+      run: |
+       cd /home/runner/work/KnativeInvoiceManager/KnativeInvoiceManager
+       cp -R common registerinvoice/.
+       /home/runner/knfunc build --registry docker.io/x00159358 --push --verbose --path registerinvoice
+       
+name: Manual workflow
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      name:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'Person to greet'
+        # Default value if no value is explicitly provided
+        default: 'World'
+        # Input has to be provided for the workflow to run
+        required: true
+        # The data type of the input
+        type: string
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "greet"
+  greet:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Runs a single command using the runners shell
+    - name: Send greeting
+      run: echo "Hello ${{ inputs.name }}"
