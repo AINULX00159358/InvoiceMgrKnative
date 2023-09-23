@@ -132,3 +132,18 @@ are run.
 npm test
 ```
 # InvoiceMgrKnative
+
+Sample Client Request for Invoice generation
+```
+curl -v "http://broker-ingress.knative-eventing.svc.cluster.local/default/example-broker" \
+-X POST \
+-H "Ce-Id: InvoiceGenRequest" \
+-H "Ce-Specversion: 1.0" \
+-H "Ce-Type: InvoiceGenRequest" \
+-H "Ce-Source: invoice:from:curler" \
+-H "Ce-Subject: invoice:gen:curler" \
+-H "Content-Type: application/json" \
+-d '{"custID":"231636131333", "amount": 234555, "date": "21/09/2323"}'
+```
+
+
