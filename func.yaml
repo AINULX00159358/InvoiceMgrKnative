@@ -1,0 +1,16 @@
+specVersion: 0.35.0
+name: invoicemgr
+runtime: node
+registry: docker.io/x00159358
+image: docker.io/x00159358/invoicemgrimg:latest
+imageDigest: sha256:62967005d87ea0eebfd9418768ddb68857128581ae6230ac824ca9bda247bb53
+created: 2023-09-22T18:55:27.52100523+01:00
+invoke: cloudevent
+build:
+  builder: pack
+run:
+  envs:
+  - name: STARTUP
+    value: index
+deploy:
+  namespace: default
