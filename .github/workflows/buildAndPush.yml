@@ -56,3 +56,4 @@ jobs:
       run: |
        cd /home/runner/work/InvoiceMgrKnative/InvoiceMgrKnative
        /home/runner/knfunc build --registry docker.io/x00159358 --image docker.io/x00159358/invoicemgrimg:${{ inputs.TagVersion }} --push --verbose
+       docker buildx imagetools create docker.io/x00159358/invoicemgrimg:${{ inputs.TagVersion }} --tag docker.io/x00159358/invoicemgrimg:staging 
