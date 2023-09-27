@@ -7,8 +7,6 @@ const source = 'urn:event:from:invoice';
 const type = 'invoice';
 const serviceName = process.env.STARTUP;
 
-const startuptime = new Date().now;
-
 const invoiceTemplate = {
        'custID': null,
        'amount': null,
@@ -20,6 +18,7 @@ const invoiceTemplate = {
        'paymentID': null,
        'status': null,
        'balance': null,
+       'startuplatency': null,
        'history': {}
     };
 
