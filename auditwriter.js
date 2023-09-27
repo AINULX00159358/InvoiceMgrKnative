@@ -37,7 +37,7 @@ const handle = async (context, event) => {
     avgLatency = (sumlatency/100);
     sumlatency = 0;
   }
-  console.log(event.data.invoiceID + ", avgLatency="+avgLatency + " maxLatency="+ maxLatency+ " invoice.startuplatency="+ event.data.startuplatency);
+  console.log(event.data.invoiceID + ", avgLatency="+avgLatency + " maxLatency="+ maxLatency);
  
   return new CloudEvent({
     source: 'Invoice.Audit',
