@@ -7,6 +7,9 @@ const source = 'urn:event:from:invoice';
 const type = 'invoice';
 const serviceName = process.env.STARTUP;
 
+const startuptime = new Date().now;
+let startupDelay = null;
+
 const invoiceTemplate = {
        'custID': null,
        'amount': null,
@@ -18,6 +21,7 @@ const invoiceTemplate = {
        'paymentID': null,
        'status': null,
        'balance': null,
+       'startuplatency': startupDelay,
        'history': {}
     };
 
@@ -115,6 +119,11 @@ function validate(invoice)  {
     return newInvoice
 }
 
+function calculateStartup(){
+    if (startupDelay == null){
+        startupDelay = new Date().now - startuptime;
+    }
+}
 
  
-module.exports = { newInvoice, register, payment, createCloudEventResponse, createJsonResponse, createJsonPayment, validate, createCloudEvent  }
+module.exports = { calculateStartup, newInvoice, register, payment, createCloudEventResponse, createJsonResponse, createJsonPayment, validate, createCloudEvent  }
