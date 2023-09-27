@@ -21,7 +21,7 @@ const invoiceTemplate = {
        'paymentID': null,
        'status': null,
        'balance': null,
-       'startuplatency': startupDelay,
+       'startuplatency': null,
        'history': {}
     };
 
@@ -37,6 +37,7 @@ function updatetHistory(invoice) {
     let history = invoice.history;
     history[serviceName+"_"+invoice.status] = Date.now();
     invoice.history = history;
+    invoice.startuplatency = startupDelay;
     return invoice;
 }
 
