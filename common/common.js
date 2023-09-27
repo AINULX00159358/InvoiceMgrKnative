@@ -18,7 +18,8 @@ const invoiceTemplate = {
        'paymentID': null,
        'status': null,
        'balance': null,
-       'history': {}
+       'history': {},
+       'latency': null
     };
 
 const paymentTemplate = {

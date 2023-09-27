@@ -19,8 +19,11 @@ const { CloudEvent } = require('cloudevents');
  * @param {CloudEvent} event the CloudEvent
  */
 const handle = async (context, event) => {
-  console.log(event.data.status + " :  "+ event.data.invoiceID + JSON.stringify(event.data.history));
-
+  let starting = event.data.history["invoicegenerator_NEW"];
+  let ending = event.data.history["invoicevalidation_CLOSED"];
+  let latency = ending - starting;
+  console.log(event.data.invoiceID + ", latency="+latency);
+ 
   return new CloudEvent({
     source: 'Invoice.Audit',
     type: 'Audit',
