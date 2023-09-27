@@ -27,7 +27,7 @@ const handle = async (context, event) => {
   counter = counter + 1;
   let starting = event.data.history["invoicegenerator_NEW"];
   let ending = event.data.history["invoicevalidation_CLOSED"];
-  let startupDelay = event.data.startupDelay;
+  let startupDelay = event.data.startuplatency;
   let latency = ending - starting;
   sumlatency = sumlatency + latency;
   if ( latency > maxLatency ) {
