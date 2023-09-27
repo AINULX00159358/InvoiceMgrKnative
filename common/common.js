@@ -8,7 +8,6 @@ const type = 'invoice';
 const serviceName = process.env.STARTUP;
 
 const startuptime = new Date().now;
-let startupDelay = null;
 
 const invoiceTemplate = {
        'custID': null,
@@ -21,7 +20,6 @@ const invoiceTemplate = {
        'paymentID': null,
        'status': null,
        'balance': null,
-       'startuplatency': null,
        'history': {}
     };
 
@@ -37,7 +35,6 @@ function updatetHistory(invoice) {
     let history = invoice.history;
     history[serviceName+"_"+invoice.status] = Date.now();
     invoice.history = history;
-    invoice.startuplatency = startupDelay;
     return invoice;
 }
 
@@ -120,11 +117,5 @@ function validate(invoice)  {
     return newInvoice
 }
 
-function calculateStartup(){
-    if (startupDelay == null){
-        startupDelay = new Date().now - startuptime;
-    }
-}
-
  
-module.exports = { calculateStartup, newInvoice, register, payment, createCloudEventResponse, createJsonResponse, createJsonPayment, validate, createCloudEvent  }
+module.exports = { newInvoice, register, payment, createCloudEventResponse, createJsonResponse, createJsonPayment, validate, createCloudEvent  }

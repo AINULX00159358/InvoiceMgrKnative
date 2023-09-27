@@ -27,7 +27,6 @@ const handle = async (context, event) => {
   counter = counter + 1;
   let starting = event.data.history["invoicegenerator_NEW"];
   let ending = event.data.history["invoicevalidation_CLOSED"];
-  let startupDelay = event.data.startuplatency;
   let latency = ending - starting;
   sumlatency = sumlatency + latency;
   if ( latency > maxLatency ) {
@@ -38,12 +37,12 @@ const handle = async (context, event) => {
     avgLatency = (sumlatency/100);
     sumlatency = 0;
   }
-  console.log(event.data.invoiceID + ", avgLatency="+avgLatency + " maxLatency="+ maxLatency+ " startupDelay="+ startupDelay);
+  console.log(event.data.invoiceID + ", avgLatency="+avgLatency + " maxLatency="+ maxLatency);
  
   return new CloudEvent({
     source: 'Invoice.Audit',
     type: 'Audit',
-    data: { "invoiceID": event.data.invoiceID, "avglatency": avgLatency, "maxlatency": maxLatency, " startupDelay": startupDelay}
+    data: { "invoiceID": event.data.invoiceID, "avglatency": avgLatency, "maxlatency": maxLatency}
   });
 };
 
