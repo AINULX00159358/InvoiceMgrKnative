@@ -18,16 +18,31 @@ const { CloudEvent } = require('cloudevents');
  * See: https://github.com/knative/func/blob/main/docs/function-developers/nodejs.md#the-context-object
  * @param {CloudEvent} event the CloudEvent
  */
+let maxLatency = 0
+let counter = 0
+let sumlatency = 0
+let avgLatency  = 0;
+
 const handle = async (context, event) => {
+  counter = counter + 1;
   let starting = event.data.history["invoicegenerator_NEW"];
   let ending = event.data.history["invoicevalidation_CLOSED"];
   let latency = ending - starting;
-  console.log(event.data.invoiceID + ", latency="+latency);
+  sumlatency = sumlatency + latency;
+  if ( latency > maxLatency ) {
+      maxLatency = latency;
+  }
+  if (counter > 100) {
+    counter = 0;
+    avgLatency = (sumlatency/100);
+    sumlatency = 0;
+  }
+  console.log(event.data.invoiceID + ", avgLatency="+avgLatency + " maxLatency="+ maxLatency);
  
   return new CloudEvent({
     source: 'Invoice.Audit',
     type: 'Audit',
-    data: { "invoiceID": event.data.invoiceID, "latency": latency}
+    data: { "invoiceID": event.data.invoiceID, "avglatency": avgLatency, "maxlatency": maxLatency}
   });
 };
 
