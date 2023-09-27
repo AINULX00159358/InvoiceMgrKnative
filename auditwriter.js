@@ -19,7 +19,7 @@ const { CloudEvent } = require('cloudevents');
  * @param {CloudEvent} event the CloudEvent
  */
 const handle = async (context, event) => {
-  console.log(event.data.status + " :  "+ event.data.invoiceID +event.data.history);
+  console.log(event.data.status + " :  "+ event.data.invoiceID + JSON.stringify(event.data.history));
 
   return new CloudEvent({
     source: 'Invoice.Audit',
