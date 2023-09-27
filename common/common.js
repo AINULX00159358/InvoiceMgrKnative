@@ -5,6 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 
 const source = 'urn:event:from:invoice';
 const type = 'invoice';
+const serviceName = process.env.STARTUP;
 
 const invoiceTemplate = {
        'custID': null,
@@ -16,7 +17,8 @@ const invoiceTemplate = {
        'invoiceID': null,
        'paymentID': null,
        'status': null,
-       'balance': null
+       'balance': null,
+       'history': {}
     };
 
 const paymentTemplate = {
@@ -24,6 +26,14 @@ const paymentTemplate = {
     'invoiceID': null,
     'amountPaid': null,
     'paymentID': null
+}
+
+
+function updatetHistory(invoice) {
+    let history = invoice.history;
+    history[serviceName+"_"+invoice.status] = Date.now();
+    invoice.history = history;
+    return invoice;
 }
 
 function createCloudEventResponse(invoice){
@@ -35,7 +45,7 @@ function createCloudEvent(invoice){
        id: invoice.invoiceID || invoice.clientID,
        type: type + "." + invoice.status,
        source: source + "/" + invoice.status,
-       data: invoice,
+       data: updatetHistory(invoice),
        subject: "invoice-"+ ( invoice.status || "UNKNOWN" ),
        time: new Date().toISOString()
       });
@@ -50,7 +60,7 @@ function createJsonResponse(invoice){
             "source" : source + "/" + invoice.status,
             "subject" : "invoice-"+ ( invoice.status || "UNKNOWN" ),
             "time" : new Date().toISOString(),
-            "data" : invoice
+            "data" : updatetHistory(invoice)
      };
 }
 
@@ -65,7 +75,7 @@ function createJsonPayment(invoice, amount){
             "source" : source + "/payment",
             "subject" : "invoice-payment",
             "time" : new Date().toISOString(),
-            "data" : invoice
+            "data" : updatetHistory(invoice)
      };
 }
 
