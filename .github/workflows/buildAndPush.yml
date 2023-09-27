@@ -9,11 +9,11 @@ on:
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
-      DockerUsername:
+      TagVersion:
         # Friendly description to be shown in the UI instead of 'name'
-        description: 'user name of docker container registry'
+        description: 'Version of Image tag to build'
         # Default value if no value is explicitly provided
-        default: 'x00159358'
+        default: '1.0.0-27092023'
         # Input has to be provided for the workflow to run
         required: false
         # The data type of the input
@@ -55,4 +55,4 @@ jobs:
     - name: buildAndPushImage
       run: |
        cd /home/runner/work/InvoiceMgrKnative/InvoiceMgrKnative
-       /home/runner/knfunc build --registry docker.io/x00159358 --push --verbose
+       /home/runner/knfunc build --registry docker.io/x00159358 --image docker.io/x00159358/invoicemgrimg:${{ inputs.TagVersion }} --push --verbose
