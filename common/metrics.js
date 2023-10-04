@@ -1,5 +1,4 @@
 'use strict'
-const { process } = require('process');
 const { setInterval } = require('timers');
 require('log-timestamp');
 
