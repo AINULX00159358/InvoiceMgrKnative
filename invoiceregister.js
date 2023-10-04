@@ -1,8 +1,8 @@
-const common = require('./common/common.js')
-console.log("common ", common)
+const metrics = require('./common/metrics.js');
+const common = require('./common/common.js');
 
 const handle = async (context, event) => {
-    console.log(event);
+    metrics.update();
     let invoice = common.register(event.data);
     return common.createCloudEvent(invoice);    
 };

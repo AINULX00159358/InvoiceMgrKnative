@@ -1,4 +1,3 @@
-
 'use strict'
 const { CloudEvent, HTTP } = require('cloudevents')
 const { v4: uuidv4 } = require('uuid');
@@ -32,7 +31,8 @@ const paymentTemplate = {
 
 function updatetHistory(invoice) {
     let history = invoice.history;
-    history[serviceName+"_"+invoice.status] = Date.now();
+    history[invoice.status] = Date.now();
+    history[type+"_"+invoice.status] = Date.now();
     invoice.history = history;
     return invoice;
 }
