@@ -6,6 +6,6 @@ kn trigger create invoicepayment-trigger --broker invoicemgr-event-broker --filt
 sleep 5
 kn trigger create invoicevalidation-trigger --broker invoicemgr-event-broker --filter type=invoice.PAID --sink ksvc:invoicevalidation
 sleep 5
-kn trigger create auditwriter-trigger --broker invoicemgr-event-broker --filter type=invoice.CLOSED --sink ksvc:auditwriter
+kn trigger create invoiceaudit-trigger --broker invoicemgr-event-broker --filter type=invoice.CLOSED --sink ksvc:invoiceaudit
 sleep 5
 kn trigger list
