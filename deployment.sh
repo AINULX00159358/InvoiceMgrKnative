@@ -1,10 +1,3 @@
-echo "Deleteing Services if Exist"
-kn service delete auditwriter || true
-kn service delete invoicegenerator || true
-kn service delete invoiceregister || true
-kn service delete invoicepayment || true
-kn service delete invoicevalidation || true
-sleep 5
 export SCALE_TARGET=120
 export SCALE_UTIL_PERC=80
 echo "Application will scale once TPS is increased over 120 (i.e scale_target * (scale_utilization/100))"
