@@ -1,4 +1,4 @@
-export SCALE_TARGET=120
+export SCALE_TARGET=150
 export SCALE_UTIL_PERC=80
 echo "Application will scale once TPS is increased over 120 (i.e scale_target * (scale_utilization/100))"
 echo "Deploying Services"
