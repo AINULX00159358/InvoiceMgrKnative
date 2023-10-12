@@ -20,6 +20,7 @@
   "dependencies": {
     "cloudevents": "^7.0.1",
     "faas-js-runtime": "^2.2.2",
-    "log-timestamp": "^0.3.0"
+    "log-timestamp": "^0.3.0",
+    "prom-client": "^14.2.0"
   }
 }
