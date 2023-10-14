@@ -120,7 +120,8 @@ function calculateLatency(maxLatency, isoDateTime) {
  if (maxLatency == NaN || maxLatency == null) {
     maxLatency = 0;
  }   
- const currentLatency = (Date.now - Date.parse(isoDateTime)); 
+ console.log(" isoDateTime = "+ isoDateTime)
+ const currentLatency = (Date.now() - Date.parse(isoDateTime)); 
  if (currentLatency > maxLatency) {
     maxLatency = currentLatency;
  }
