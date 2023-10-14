@@ -1,16 +1,23 @@
 export SCALE_TARGET=150
-export SCALE_UTIL_PERC=80
-echo "Application will scale once TPS is increased over 120 (i.e scale_target * (scale_utilization/100))"
-echo "Deploying Services"
-kn service create invoiceaudit --env STARTUP=auditwriter --image x00159358/invoicemgrimg:latest --label app.solution=invoicemgr --scale-metric=rps --scale-target=${SCALE_TARGET} --scale-utilization=${SCALE_UTIL_PERC} 
-sleep 5
-kn service create invoicegenerator --env STARTUP=invoicegenerator --image x00159358/invoicemgrimg:latest --label app.solution=invoicemgr --scale-metric=rps --scale-target=${SCALE_TARGET} --scale-utilization=${SCALE_UTIL_PERC}
-sleep 5
-kn service create invoiceregister --env STARTUP=invoiceregister --image x00159358/invoicemgrimg:latest --label app.solution=invoicemgr --scale-metric=rps --scale-target=${SCALE_TARGET} --scale-utilization=${SCALE_UTIL_PERC}
-sleep 5 
-kn service create invoicepayment --env STARTUP=invoicepayment --image x00159358/invoicemgrimg:latest --label app.solution=invoicemgr --scale-metric=rps --scale-target=${SCALE_TARGET} --scale-utilization=${SCALE_UTIL_PERC}
-sleep 5
-kn service create invoicevalidation --env STARTUP=invoicevalidation --image x00159358/invoicemgrimg:latest --label app.solution=invoicemgr --scale-metric=rps --scale-target=${SCALE_TARGET} --scale-utilization=${SCALE_UTIL_PERC}
-sleep 5
-kn service list
+export SCALE_UTIL_PERC=95
+export REQUEST=cpu=1000m,memory=1024Mi
 
+kn_service_create() {
+    echo "DEPLOYING KNATIVE SERVICE $1"
+    kn service create $1 --env STARTUP=$1 --image x00159358/invoicemgrimg:latest --pull-policy=IfNotPresent --label app.solution=invoicemgr --scale-metric=rps --scale-target=${SCALE_TARGET} --scale-utilization=${SCALE_UTIL_PERC}
+}
+
+echo "Resources Requrested is ${REQUEST}"
+echo "Target RPS is ${SCALE_TARGET} and Utilization is ${SCALE_UTIL_PERC}"
+echo "Application will scale once TPS is increased over $(($SCALE_TARGET * $SCALE_UTIL_PERC/100)) (i.e scale_target * (scale_utilization/100))"
+
+echo "-------------Deploying Services------------"
+
+kn_service_create invoiceaudit
+kn_service_create invoicegenerator
+kn_service_create invoiceregister
+kn_service_create invoicepayment
+kn_service_create invoicevalidation
+
+
+kn service list
