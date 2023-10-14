@@ -8,7 +8,7 @@ const handle = async (context, event) => {
 return new CloudEvent({
       source: 'Invoice.Audit',
       type: 'Audit',
-      data: { "invoiceID": event.data.invoiceID, "starting": starting, "ending": ending, "maxlatency": maxLatency}
+      data: { "invoiceID": event.data.invoiceID, "starting": starting, "ending": ending, "maxLatency": maxLatency}
     });
 };
 
