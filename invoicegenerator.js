@@ -1,12 +1,8 @@
 const common = require('./common/common.js')
-const metrics = require('./common/metrics.js');
-
-require('log-timestamp');
 
 const handle = async (context, event) => {
-   // console.log(event);
-   metrics.update(); 
     const invoice = common.newInvoice(event.data.custID, event.data.amount);
+    invoice.latency = common.calculateLatency(invoice.latency, event.time);
     return common.createCloudEvent(invoice);
 };
 

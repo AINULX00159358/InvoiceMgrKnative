@@ -17,7 +17,7 @@ const invoiceTemplate = {
        'paymentID': null,
        'status': null,
        'balance': null,
-       'startuplatency': null,
+       'latency': null,
        'history': {}
     };
 
@@ -116,5 +116,16 @@ function validate(invoice)  {
     return newInvoice
 }
 
+function calculateLatency(maxLatency, isoDateTime) {
+ if (maxLatency == NaN || maxLatency == null) {
+    maxLatency = 0;
+ }   
+ const currentLatency = (Date.now - Date.parse(isoDateTime)); 
+ if (currentLatency > maxLatency) {
+    maxLatency = currentLatency;
+ }
+ return maxLatency;
+}
+
  
-module.exports = { newInvoice, register, payment, createCloudEventResponse, createJsonResponse, createJsonPayment, validate, createCloudEvent  }
+module.exports = {calculateLatency, newInvoice, register, payment, createCloudEventResponse, createJsonResponse, createJsonPayment, validate, createCloudEvent  }

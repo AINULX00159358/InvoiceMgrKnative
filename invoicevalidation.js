@@ -1,10 +1,9 @@
-const metrics = require('./common/metrics.js');
 const common = require('./common/common.js');
 
 
 const handle = async (context, event) => {
-    metrics.update();
     let invoice = event.data;
+    invoice.latency = common.calculateLatency(invoice.latency, event.time);
     return common.createCloudEvent(common.validate(invoice));
 };
 
